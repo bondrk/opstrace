@@ -1,18 +1,3 @@
-/**
- * Copyright 2020 Opstrace, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 import { GraphQLClient } from "graphql-request";
 import { print } from "graphql";
 import { GraphQLError } from "graphql-request/dist/types";
@@ -2307,6 +2292,14 @@ export type CreateBranchMutation = {
   insert_branch_one?: Maybe<Pick<Branch, "name">>;
 };
 
+export type DeleteBranchMutationVariables = Exact<{
+  name: Scalars["String"];
+}>;
+
+export type DeleteBranchMutation = {
+  delete_branch_by_pk?: Maybe<Pick<Branch, "name">>;
+};
+
 export type SubscribeToBranchesSubscriptionVariables = Exact<{
   [key: string]: never;
 }>;
@@ -2336,6 +2329,31 @@ export type SubscribeToFilesSubscription = {
       | "is_modified"
     >
   >;
+};
+
+export type CreateModuleMutationVariables = Exact<{
+  name: Scalars["String"];
+  scope: Scalars["String"];
+  branch: Scalars["String"];
+  version: Scalars["String"];
+  files: Array<File_Insert_Input>;
+}>;
+
+export type CreateModuleMutation = {
+  insert_module_one?: Maybe<Pick<Module, "created_at">>;
+  insert_module_version_one?: Maybe<Pick<Module_Version, "created_at">>;
+  insert_file?: Maybe<{ returning: Array<Pick<File, "id">> }>;
+};
+
+export type GetModuleQueryVariables = Exact<{
+  name: Scalars["String"];
+  scope: Scalars["String"];
+  branch: Scalars["String"];
+}>;
+
+export type GetModuleQuery = {
+  module_by_pk?: Maybe<Pick<Module, "created_at">>;
+  branch_by_pk?: Maybe<Pick<Branch, "protected">>;
 };
 
 export type SubscribeToModulesSubscriptionVariables = Exact<{
@@ -2472,6 +2490,13 @@ export const CreateBranchDocument = gql`
     }
   }
 `;
+export const DeleteBranchDocument = gql`
+  mutation DeleteBranch($name: String!) {
+    delete_branch_by_pk(name: $name) {
+      name
+    }
+  }
+`;
 export const SubscribeToBranchesDocument = gql`
   subscription SubscribeToBranches {
     branch {
@@ -2495,6 +2520,46 @@ export const SubscribeToFilesDocument = gql`
       base_file_id
       mark_deleted
       is_modified
+    }
+  }
+`;
+export const CreateModuleDocument = gql`
+  mutation CreateModule(
+    $name: String!
+    $scope: String!
+    $branch: String!
+    $version: String!
+    $files: [file_insert_input!]!
+  ) {
+    insert_module_one(
+      object: { name: $name, scope: $scope, branch_name: $branch }
+    ) {
+      created_at
+    }
+    insert_module_version_one(
+      object: {
+        module_name: $name
+        module_scope: $scope
+        branch_name: $branch
+        version: $version
+      }
+    ) {
+      created_at
+    }
+    insert_file(objects: $files) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+export const GetModuleDocument = gql`
+  query GetModule($name: String!, $scope: String!, $branch: String!) {
+    module_by_pk(branch_name: $branch, name: $name, scope: $scope) {
+      created_at
+    }
+    branch_by_pk(name: $branch) {
+      protected
     }
   }
 `;
@@ -2670,6 +2735,22 @@ export function getSdk(
         )
       );
     },
+    DeleteBranch(
+      variables: DeleteBranchMutationVariables
+    ): Promise<{
+      data?: DeleteBranchMutation | undefined;
+      extensions?: any;
+      headers: Headers;
+      status: number;
+      errors?: GraphQLError[] | undefined;
+    }> {
+      return withWrapper(() =>
+        client.rawRequest<DeleteBranchMutation>(
+          print(DeleteBranchDocument),
+          variables
+        )
+      );
+    },
     SubscribeToBranches(
       variables?: SubscribeToBranchesSubscriptionVariables
     ): Promise<{
@@ -2700,6 +2781,35 @@ export function getSdk(
           print(SubscribeToFilesDocument),
           variables
         )
+      );
+    },
+    CreateModule(
+      variables: CreateModuleMutationVariables
+    ): Promise<{
+      data?: CreateModuleMutation | undefined;
+      extensions?: any;
+      headers: Headers;
+      status: number;
+      errors?: GraphQLError[] | undefined;
+    }> {
+      return withWrapper(() =>
+        client.rawRequest<CreateModuleMutation>(
+          print(CreateModuleDocument),
+          variables
+        )
+      );
+    },
+    GetModule(
+      variables: GetModuleQueryVariables
+    ): Promise<{
+      data?: GetModuleQuery | undefined;
+      extensions?: any;
+      headers: Headers;
+      status: number;
+      errors?: GraphQLError[] | undefined;
+    }> {
+      return withWrapper(() =>
+        client.rawRequest<GetModuleQuery>(print(GetModuleDocument), variables)
       );
     },
     SubscribeToModules(
