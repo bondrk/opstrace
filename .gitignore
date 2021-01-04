@@ -13,6 +13,8 @@ out
 .cache
 .build
 yarn-error.log
+id.jwt
+access.jwt
 
 opstrace-config.yaml
 prometheus.yml
