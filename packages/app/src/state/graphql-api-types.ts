@@ -2447,10 +2447,40 @@ export type SubscribeToBranchesSubscriptionVariables = Exact<{ [key: string]: ne
 
 export type SubscribeToBranchesSubscription = { branch: Array<Pick<Branch, 'name' | 'created_at' | 'protected'>> };
 
+export type GetFileQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type GetFileQuery = { file_by_pk?: Maybe<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified' | 'alias_for'>> };
+
+export type GetFileByAttrsQueryVariables = Exact<{
+  branch?: Maybe<Scalars['String']>;
+  ext?: Maybe<Scalars['String']>;
+  module?: Maybe<Scalars['String']>;
+  scope?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['String']>;
+  path?: Maybe<Scalars['String']>;
+}>;
+
+
+export type GetFileByAttrsQuery = { file: Array<(
+    Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified' | 'alias_for'>
+    & { alias?: Maybe<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified' | 'alias_for'>> }
+  )> };
+
 export type SubscribeToFilesSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToFilesSubscription = { file: Array<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified'>> };
+export type SubscribeToFilesSubscription = { file: Array<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified' | 'alias_for'>> };
+
+export type UpdateAliasMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  alias?: Maybe<Scalars['uuid']>;
+}>;
+
+
+export type UpdateAliasMutation = { update_file_by_pk?: Maybe<Pick<File, 'id'>> };
 
 export type CreateModuleMutationVariables = Exact<{
   name: Scalars['String'];
@@ -2461,7 +2491,7 @@ export type CreateModuleMutationVariables = Exact<{
 }>;
 
 
-export type CreateModuleMutation = { insert_module_one?: Maybe<Pick<Module, 'created_at'>>, insert_module_version_one?: Maybe<Pick<Module_Version, 'created_at'>>, insert_file?: Maybe<{ returning: Array<Pick<File, 'id'>> }> };
+export type CreateModuleMutation = { insert_module_one?: Maybe<Pick<Module, 'created_at'>>, insert_module_version?: Maybe<{ returning: Array<Pick<Module_Version, 'created_at'>> }>, insert_file?: Maybe<{ returning: Array<Pick<File, 'id'>> }> };
 
 export type GetModuleQueryVariables = Exact<{
   name: Scalars['String'];
@@ -2476,6 +2506,30 @@ export type SubscribeToModulesSubscriptionVariables = Exact<{ [key: string]: nev
 
 
 export type SubscribeToModulesSubscription = { module: Array<Pick<Module, 'name' | 'scope' | 'created_at' | 'branch_name'>> };
+
+export type CreateVersionedFilesMutationVariables = Exact<{
+  name: Scalars['String'];
+  scope: Scalars['String'];
+  branch: Scalars['String'];
+  version: Scalars['String'];
+  files: Array<File_Insert_Input>;
+}>;
+
+
+export type CreateVersionedFilesMutation = { insert_module_version?: Maybe<{ returning: Array<Pick<Module_Version, 'created_at'>> }>, insert_file?: Maybe<{ returning: Array<Pick<File, 'id'>> }> };
+
+export type GetModuleVersionFilesQueryVariables = Exact<{
+  branch?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  scope?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['String']>;
+}>;
+
+
+export type GetModuleVersionFilesQuery = { file: Array<(
+    Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified' | 'alias_for'>
+    & { alias?: Maybe<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified' | 'alias_for'>> }
+  )> };
 
 export type SubscribeToModuleVersionsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -2594,6 +2648,56 @@ export const SubscribeToBranchesDocument = gql`
   }
 }
     `;
+export const GetFileDocument = gql`
+    query GetFile($id: uuid!) {
+  file_by_pk(id: $id) {
+    id
+    ext
+    path
+    module_name
+    module_scope
+    module_version
+    created_at
+    branch_name
+    base_file_id
+    mark_deleted
+    is_modified
+    alias_for
+  }
+}
+    `;
+export const GetFileByAttrsDocument = gql`
+    query GetFileByAttrs($branch: String, $ext: String, $module: String, $scope: String, $version: String, $path: String) {
+  file(where: {branch_name: {_eq: $branch}, ext: {_eq: $ext}, module_name: {_eq: $module}, module_scope: {_eq: $scope}, module_version: {_eq: $version}, path: {_eq: $path}}) {
+    id
+    ext
+    path
+    module_name
+    module_scope
+    module_version
+    created_at
+    branch_name
+    base_file_id
+    mark_deleted
+    is_modified
+    alias_for
+    alias {
+      id
+      ext
+      path
+      module_name
+      module_scope
+      module_version
+      created_at
+      branch_name
+      base_file_id
+      mark_deleted
+      is_modified
+      alias_for
+    }
+  }
+}
+    `;
 export const SubscribeToFilesDocument = gql`
     subscription SubscribeToFiles {
   file {
@@ -2608,6 +2712,14 @@ export const SubscribeToFilesDocument = gql`
     base_file_id
     mark_deleted
     is_modified
+    alias_for
+  }
+}
+    `;
+export const UpdateAliasDocument = gql`
+    mutation UpdateAlias($id: uuid!, $alias: uuid) {
+  update_file_by_pk(pk_columns: {id: $id}, _set: {alias_for: $alias}) {
+    id
   }
 }
     `;
@@ -2616,8 +2728,10 @@ export const CreateModuleDocument = gql`
   insert_module_one(object: {name: $name, scope: $scope, branch_name: $branch}) {
     created_at
   }
-  insert_module_version_one(object: {module_name: $name, module_scope: $scope, branch_name: $branch, version: $version}) {
-    created_at
+  insert_module_version(objects: [{module_name: $name, module_scope: $scope, branch_name: $branch, version: $version}, {module_name: $name, module_scope: $scope, branch_name: $branch, version: "latest"}]) {
+    returning {
+      created_at
+    }
   }
   insert_file(objects: $files) {
     returning {
@@ -2643,6 +2757,52 @@ export const SubscribeToModulesDocument = gql`
     scope
     created_at
     branch_name
+  }
+}
+    `;
+export const CreateVersionedFilesDocument = gql`
+    mutation CreateVersionedFiles($name: String!, $scope: String!, $branch: String!, $version: String!, $files: [file_insert_input!]!) {
+  insert_module_version(objects: [{module_name: $name, module_scope: $scope, branch_name: $branch, version: $version}]) {
+    returning {
+      created_at
+    }
+  }
+  insert_file(objects: $files) {
+    returning {
+      id
+    }
+  }
+}
+    `;
+export const GetModuleVersionFilesDocument = gql`
+    query GetModuleVersionFiles($branch: String, $name: String, $scope: String, $version: String) {
+  file(where: {_and: {branch_name: {_eq: $branch}, module_version: {_eq: $version}, module_scope: {_eq: $scope}, module_name: {_eq: $name}}}) {
+    id
+    ext
+    path
+    module_name
+    module_scope
+    module_version
+    created_at
+    branch_name
+    base_file_id
+    mark_deleted
+    is_modified
+    alias_for
+    alias {
+      id
+      ext
+      path
+      module_name
+      module_scope
+      module_version
+      created_at
+      branch_name
+      base_file_id
+      mark_deleted
+      is_modified
+      alias_for
+    }
   }
 }
     `;
@@ -2790,8 +2950,17 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     SubscribeToBranches(variables?: SubscribeToBranchesSubscriptionVariables): Promise<{ data?: SubscribeToBranchesSubscription | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
         return withWrapper(() => client.rawRequest<SubscribeToBranchesSubscription>(print(SubscribeToBranchesDocument), variables));
     },
+    GetFile(variables: GetFileQueryVariables): Promise<{ data?: GetFileQuery | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
+        return withWrapper(() => client.rawRequest<GetFileQuery>(print(GetFileDocument), variables));
+    },
+    GetFileByAttrs(variables?: GetFileByAttrsQueryVariables): Promise<{ data?: GetFileByAttrsQuery | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
+        return withWrapper(() => client.rawRequest<GetFileByAttrsQuery>(print(GetFileByAttrsDocument), variables));
+    },
     SubscribeToFiles(variables?: SubscribeToFilesSubscriptionVariables): Promise<{ data?: SubscribeToFilesSubscription | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
         return withWrapper(() => client.rawRequest<SubscribeToFilesSubscription>(print(SubscribeToFilesDocument), variables));
+    },
+    UpdateAlias(variables: UpdateAliasMutationVariables): Promise<{ data?: UpdateAliasMutation | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
+        return withWrapper(() => client.rawRequest<UpdateAliasMutation>(print(UpdateAliasDocument), variables));
     },
     CreateModule(variables: CreateModuleMutationVariables): Promise<{ data?: CreateModuleMutation | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
         return withWrapper(() => client.rawRequest<CreateModuleMutation>(print(CreateModuleDocument), variables));
@@ -2801,6 +2970,12 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     SubscribeToModules(variables?: SubscribeToModulesSubscriptionVariables): Promise<{ data?: SubscribeToModulesSubscription | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
         return withWrapper(() => client.rawRequest<SubscribeToModulesSubscription>(print(SubscribeToModulesDocument), variables));
+    },
+    CreateVersionedFiles(variables: CreateVersionedFilesMutationVariables): Promise<{ data?: CreateVersionedFilesMutation | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
+        return withWrapper(() => client.rawRequest<CreateVersionedFilesMutation>(print(CreateVersionedFilesDocument), variables));
+    },
+    GetModuleVersionFiles(variables?: GetModuleVersionFilesQueryVariables): Promise<{ data?: GetModuleVersionFilesQuery | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
+        return withWrapper(() => client.rawRequest<GetModuleVersionFilesQuery>(print(GetModuleVersionFilesDocument), variables));
     },
     SubscribeToModuleVersions(variables?: SubscribeToModuleVersionsSubscriptionVariables): Promise<{ data?: SubscribeToModuleVersionsSubscription | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
         return withWrapper(() => client.rawRequest<SubscribeToModuleVersionsSubscription>(print(SubscribeToModuleVersionsDocument), variables));
