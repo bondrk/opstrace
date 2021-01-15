@@ -11,6 +11,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  jsonb: any;
   timestamp: any;
   timestamptz: any;
   uuid: any;
@@ -289,17 +290,18 @@ export enum Branch_Update_Column {
 
 /** columns and relationships of "file" */
 export type File = {
-  /** An object relationship */
-  alias?: Maybe<File>;
-  alias_for?: Maybe<Scalars['uuid']>;
   base_file_id?: Maybe<Scalars['uuid']>;
   /** An object relationship */
   branch: Branch;
   branch_name: Scalars['String'];
+  compile_errors?: Maybe<Scalars['jsonb']>;
+  contents: Scalars['String'];
   created_at: Scalars['timestamp'];
+  dts?: Maybe<Scalars['String']>;
   ext: Scalars['String'];
   id: Scalars['uuid'];
-  is_modified: Scalars['Boolean'];
+  js?: Maybe<Scalars['String']>;
+  map?: Maybe<Scalars['String']>;
   mark_deleted: Scalars['Boolean'];
   /** An object relationship */
   module?: Maybe<Module>;
@@ -309,6 +311,12 @@ export type File = {
   path: Scalars['String'];
   /** An object relationship */
   version?: Maybe<Module_Version>;
+};
+
+
+/** columns and relationships of "file" */
+export type FileCompile_ErrorsArgs = {
+  path?: Maybe<Scalars['String']>;
 };
 
 /** aggregated selection of "file" */
@@ -338,6 +346,11 @@ export type File_Aggregate_Order_By = {
   min?: Maybe<File_Min_Order_By>;
 };
 
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type File_Append_Input = {
+  compile_errors?: Maybe<Scalars['jsonb']>;
+};
+
 /** input type for inserting array relation for remote table "file" */
 export type File_Arr_Rel_Insert_Input = {
   data: Array<File_Insert_Input>;
@@ -349,15 +362,17 @@ export type File_Bool_Exp = {
   _and?: Maybe<Array<Maybe<File_Bool_Exp>>>;
   _not?: Maybe<File_Bool_Exp>;
   _or?: Maybe<Array<Maybe<File_Bool_Exp>>>;
-  alias?: Maybe<File_Bool_Exp>;
-  alias_for?: Maybe<Uuid_Comparison_Exp>;
   base_file_id?: Maybe<Uuid_Comparison_Exp>;
   branch?: Maybe<Branch_Bool_Exp>;
   branch_name?: Maybe<String_Comparison_Exp>;
+  compile_errors?: Maybe<Jsonb_Comparison_Exp>;
+  contents?: Maybe<String_Comparison_Exp>;
   created_at?: Maybe<Timestamp_Comparison_Exp>;
+  dts?: Maybe<String_Comparison_Exp>;
   ext?: Maybe<String_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
-  is_modified?: Maybe<Boolean_Comparison_Exp>;
+  js?: Maybe<String_Comparison_Exp>;
+  map?: Maybe<String_Comparison_Exp>;
   mark_deleted?: Maybe<Boolean_Comparison_Exp>;
   module?: Maybe<Module_Bool_Exp>;
   module_name?: Maybe<String_Comparison_Exp>;
@@ -375,17 +390,34 @@ export enum File_Constraint {
   FilePkey = 'file_pkey'
 }
 
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type File_Delete_At_Path_Input = {
+  compile_errors?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type File_Delete_Elem_Input = {
+  compile_errors?: Maybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type File_Delete_Key_Input = {
+  compile_errors?: Maybe<Scalars['String']>;
+};
+
 /** input type for inserting data into table "file" */
 export type File_Insert_Input = {
-  alias?: Maybe<File_Obj_Rel_Insert_Input>;
-  alias_for?: Maybe<Scalars['uuid']>;
   base_file_id?: Maybe<Scalars['uuid']>;
   branch?: Maybe<Branch_Obj_Rel_Insert_Input>;
   branch_name?: Maybe<Scalars['String']>;
+  compile_errors?: Maybe<Scalars['jsonb']>;
+  contents?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamp']>;
+  dts?: Maybe<Scalars['String']>;
   ext?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
-  is_modified?: Maybe<Scalars['Boolean']>;
+  js?: Maybe<Scalars['String']>;
+  map?: Maybe<Scalars['String']>;
   mark_deleted?: Maybe<Scalars['Boolean']>;
   module?: Maybe<Module_Obj_Rel_Insert_Input>;
   module_name?: Maybe<Scalars['String']>;
@@ -397,12 +429,15 @@ export type File_Insert_Input = {
 
 /** aggregate max on columns */
 export type File_Max_Fields = {
-  alias_for?: Maybe<Scalars['uuid']>;
   base_file_id?: Maybe<Scalars['uuid']>;
   branch_name?: Maybe<Scalars['String']>;
+  contents?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamp']>;
+  dts?: Maybe<Scalars['String']>;
   ext?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
+  js?: Maybe<Scalars['String']>;
+  map?: Maybe<Scalars['String']>;
   module_name?: Maybe<Scalars['String']>;
   module_scope?: Maybe<Scalars['String']>;
   module_version?: Maybe<Scalars['String']>;
@@ -411,12 +446,15 @@ export type File_Max_Fields = {
 
 /** order by max() on columns of table "file" */
 export type File_Max_Order_By = {
-  alias_for?: Maybe<Order_By>;
   base_file_id?: Maybe<Order_By>;
   branch_name?: Maybe<Order_By>;
+  contents?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
+  dts?: Maybe<Order_By>;
   ext?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  js?: Maybe<Order_By>;
+  map?: Maybe<Order_By>;
   module_name?: Maybe<Order_By>;
   module_scope?: Maybe<Order_By>;
   module_version?: Maybe<Order_By>;
@@ -425,12 +463,15 @@ export type File_Max_Order_By = {
 
 /** aggregate min on columns */
 export type File_Min_Fields = {
-  alias_for?: Maybe<Scalars['uuid']>;
   base_file_id?: Maybe<Scalars['uuid']>;
   branch_name?: Maybe<Scalars['String']>;
+  contents?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamp']>;
+  dts?: Maybe<Scalars['String']>;
   ext?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
+  js?: Maybe<Scalars['String']>;
+  map?: Maybe<Scalars['String']>;
   module_name?: Maybe<Scalars['String']>;
   module_scope?: Maybe<Scalars['String']>;
   module_version?: Maybe<Scalars['String']>;
@@ -439,12 +480,15 @@ export type File_Min_Fields = {
 
 /** order by min() on columns of table "file" */
 export type File_Min_Order_By = {
-  alias_for?: Maybe<Order_By>;
   base_file_id?: Maybe<Order_By>;
   branch_name?: Maybe<Order_By>;
+  contents?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
+  dts?: Maybe<Order_By>;
   ext?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  js?: Maybe<Order_By>;
+  map?: Maybe<Order_By>;
   module_name?: Maybe<Order_By>;
   module_scope?: Maybe<Order_By>;
   module_version?: Maybe<Order_By>;
@@ -474,15 +518,17 @@ export type File_On_Conflict = {
 
 /** ordering options when selecting data from "file" */
 export type File_Order_By = {
-  alias?: Maybe<File_Order_By>;
-  alias_for?: Maybe<Order_By>;
   base_file_id?: Maybe<Order_By>;
   branch?: Maybe<Branch_Order_By>;
   branch_name?: Maybe<Order_By>;
+  compile_errors?: Maybe<Order_By>;
+  contents?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
+  dts?: Maybe<Order_By>;
   ext?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
-  is_modified?: Maybe<Order_By>;
+  js?: Maybe<Order_By>;
+  map?: Maybe<Order_By>;
   mark_deleted?: Maybe<Order_By>;
   module?: Maybe<Module_Order_By>;
   module_name?: Maybe<Order_By>;
@@ -497,22 +543,33 @@ export type File_Pk_Columns_Input = {
   id: Scalars['uuid'];
 };
 
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type File_Prepend_Input = {
+  compile_errors?: Maybe<Scalars['jsonb']>;
+};
+
 /** select columns of table "file" */
 export enum File_Select_Column {
-  /** column name */
-  AliasFor = 'alias_for',
   /** column name */
   BaseFileId = 'base_file_id',
   /** column name */
   BranchName = 'branch_name',
   /** column name */
+  CompileErrors = 'compile_errors',
+  /** column name */
+  Contents = 'contents',
+  /** column name */
   CreatedAt = 'created_at',
+  /** column name */
+  Dts = 'dts',
   /** column name */
   Ext = 'ext',
   /** column name */
   Id = 'id',
   /** column name */
-  IsModified = 'is_modified',
+  Js = 'js',
+  /** column name */
+  Map = 'map',
   /** column name */
   MarkDeleted = 'mark_deleted',
   /** column name */
@@ -527,13 +584,16 @@ export enum File_Select_Column {
 
 /** input type for updating data in table "file" */
 export type File_Set_Input = {
-  alias_for?: Maybe<Scalars['uuid']>;
   base_file_id?: Maybe<Scalars['uuid']>;
   branch_name?: Maybe<Scalars['String']>;
+  compile_errors?: Maybe<Scalars['jsonb']>;
+  contents?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamp']>;
+  dts?: Maybe<Scalars['String']>;
   ext?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
-  is_modified?: Maybe<Scalars['Boolean']>;
+  js?: Maybe<Scalars['String']>;
+  map?: Maybe<Scalars['String']>;
   mark_deleted?: Maybe<Scalars['Boolean']>;
   module_name?: Maybe<Scalars['String']>;
   module_scope?: Maybe<Scalars['String']>;
@@ -544,19 +604,25 @@ export type File_Set_Input = {
 /** update columns of table "file" */
 export enum File_Update_Column {
   /** column name */
-  AliasFor = 'alias_for',
-  /** column name */
   BaseFileId = 'base_file_id',
   /** column name */
   BranchName = 'branch_name',
   /** column name */
+  CompileErrors = 'compile_errors',
+  /** column name */
+  Contents = 'contents',
+  /** column name */
   CreatedAt = 'created_at',
+  /** column name */
+  Dts = 'dts',
   /** column name */
   Ext = 'ext',
   /** column name */
   Id = 'id',
   /** column name */
-  IsModified = 'is_modified',
+  Js = 'js',
+  /** column name */
+  Map = 'map',
   /** column name */
   MarkDeleted = 'mark_deleted',
   /** column name */
@@ -568,6 +634,30 @@ export enum File_Update_Column {
   /** column name */
   Path = 'path'
 }
+
+
+/** expression to compare columns of type jsonb. All fields are combined with logical 'AND'. */
+export type Jsonb_Comparison_Exp = {
+  /** is the column contained in the given json value */
+  _contained_in?: Maybe<Scalars['jsonb']>;
+  /** does the column contain the given json value at the top level */
+  _contains?: Maybe<Scalars['jsonb']>;
+  _eq?: Maybe<Scalars['jsonb']>;
+  _gt?: Maybe<Scalars['jsonb']>;
+  _gte?: Maybe<Scalars['jsonb']>;
+  /** does the string exist as a top-level key in the column */
+  _has_key?: Maybe<Scalars['String']>;
+  /** do all of these strings exist as top-level keys in the column */
+  _has_keys_all?: Maybe<Array<Scalars['String']>>;
+  /** do any of these strings exist as top-level keys in the column */
+  _has_keys_any?: Maybe<Array<Scalars['String']>>;
+  _in?: Maybe<Array<Scalars['jsonb']>>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  _lt?: Maybe<Scalars['jsonb']>;
+  _lte?: Maybe<Scalars['jsonb']>;
+  _neq?: Maybe<Scalars['jsonb']>;
+  _nin?: Maybe<Array<Scalars['jsonb']>>;
+};
 
 /** columns and relationships of "module" */
 export type Module = {
@@ -796,7 +886,6 @@ export enum Module_Update_Column {
 
 /** columns and relationships of "module_version" */
 export type Module_Version = {
-  author_email?: Maybe<Scalars['String']>;
   /** An object relationship */
   branch: Branch;
   branch_name: Scalars['String'];
@@ -870,7 +959,6 @@ export type Module_Version_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Module_Version_Bool_Exp>>>;
   _not?: Maybe<Module_Version_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Module_Version_Bool_Exp>>>;
-  author_email?: Maybe<String_Comparison_Exp>;
   branch?: Maybe<Branch_Bool_Exp>;
   branch_name?: Maybe<String_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
@@ -889,7 +977,6 @@ export enum Module_Version_Constraint {
 
 /** input type for inserting data into table "module_version" */
 export type Module_Version_Insert_Input = {
-  author_email?: Maybe<Scalars['String']>;
   branch?: Maybe<Branch_Obj_Rel_Insert_Input>;
   branch_name?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
@@ -902,7 +989,6 @@ export type Module_Version_Insert_Input = {
 
 /** aggregate max on columns */
 export type Module_Version_Max_Fields = {
-  author_email?: Maybe<Scalars['String']>;
   branch_name?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   module_name?: Maybe<Scalars['String']>;
@@ -912,7 +998,6 @@ export type Module_Version_Max_Fields = {
 
 /** order by max() on columns of table "module_version" */
 export type Module_Version_Max_Order_By = {
-  author_email?: Maybe<Order_By>;
   branch_name?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   module_name?: Maybe<Order_By>;
@@ -922,7 +1007,6 @@ export type Module_Version_Max_Order_By = {
 
 /** aggregate min on columns */
 export type Module_Version_Min_Fields = {
-  author_email?: Maybe<Scalars['String']>;
   branch_name?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   module_name?: Maybe<Scalars['String']>;
@@ -932,7 +1016,6 @@ export type Module_Version_Min_Fields = {
 
 /** order by min() on columns of table "module_version" */
 export type Module_Version_Min_Order_By = {
-  author_email?: Maybe<Order_By>;
   branch_name?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   module_name?: Maybe<Order_By>;
@@ -963,7 +1046,6 @@ export type Module_Version_On_Conflict = {
 
 /** ordering options when selecting data from "module_version" */
 export type Module_Version_Order_By = {
-  author_email?: Maybe<Order_By>;
   branch?: Maybe<Branch_Order_By>;
   branch_name?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
@@ -985,8 +1067,6 @@ export type Module_Version_Pk_Columns_Input = {
 /** select columns of table "module_version" */
 export enum Module_Version_Select_Column {
   /** column name */
-  AuthorEmail = 'author_email',
-  /** column name */
   BranchName = 'branch_name',
   /** column name */
   CreatedAt = 'created_at',
@@ -1000,7 +1080,6 @@ export enum Module_Version_Select_Column {
 
 /** input type for updating data in table "module_version" */
 export type Module_Version_Set_Input = {
-  author_email?: Maybe<Scalars['String']>;
   branch_name?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   module_name?: Maybe<Scalars['String']>;
@@ -1010,8 +1089,6 @@ export type Module_Version_Set_Input = {
 
 /** update columns of table "module_version" */
 export enum Module_Version_Update_Column {
-  /** column name */
-  AuthorEmail = 'author_email',
   /** column name */
   BranchName = 'branch_name',
   /** column name */
@@ -1316,6 +1393,11 @@ export type Mutation_RootUpdate_Branch_By_PkArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_FileArgs = {
+  _append?: Maybe<File_Append_Input>;
+  _delete_at_path?: Maybe<File_Delete_At_Path_Input>;
+  _delete_elem?: Maybe<File_Delete_Elem_Input>;
+  _delete_key?: Maybe<File_Delete_Key_Input>;
+  _prepend?: Maybe<File_Prepend_Input>;
   _set?: Maybe<File_Set_Input>;
   where: File_Bool_Exp;
 };
@@ -1323,6 +1405,11 @@ export type Mutation_RootUpdate_FileArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_File_By_PkArgs = {
+  _append?: Maybe<File_Append_Input>;
+  _delete_at_path?: Maybe<File_Delete_At_Path_Input>;
+  _delete_elem?: Maybe<File_Delete_Elem_Input>;
+  _delete_key?: Maybe<File_Delete_Key_Input>;
+  _prepend?: Maybe<File_Prepend_Input>;
   _set?: Maybe<File_Set_Input>;
   pk_columns: File_Pk_Columns_Input;
 };
@@ -2447,12 +2534,19 @@ export type SubscribeToBranchesSubscriptionVariables = Exact<{ [key: string]: ne
 
 export type SubscribeToBranchesSubscription = { branch: Array<Pick<Branch, 'name' | 'created_at' | 'protected'>> };
 
+export type GetCompiledOutputQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type GetCompiledOutputQuery = { file_by_pk?: Maybe<Pick<File, 'js' | 'dts' | 'map' | 'compile_errors'>> };
+
 export type GetFileQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;
 
 
-export type GetFileQuery = { file_by_pk?: Maybe<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified' | 'alias_for'>> };
+export type GetFileQuery = { file_by_pk?: Maybe<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'contents'>> };
 
 export type GetFileByAttrsQueryVariables = Exact<{
   branch?: Maybe<Scalars['String']>;
@@ -2464,23 +2558,26 @@ export type GetFileByAttrsQueryVariables = Exact<{
 }>;
 
 
-export type GetFileByAttrsQuery = { file: Array<(
-    Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified' | 'alias_for'>
-    & { alias?: Maybe<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified' | 'alias_for'>> }
-  )> };
+export type GetFileByAttrsQuery = { file: Array<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'contents'>> };
 
-export type SubscribeToFilesSubscriptionVariables = Exact<{ [key: string]: never; }>;
-
-
-export type SubscribeToFilesSubscription = { file: Array<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified' | 'alias_for'>> };
-
-export type UpdateAliasMutationVariables = Exact<{
-  id: Scalars['uuid'];
-  alias?: Maybe<Scalars['uuid']>;
+export type SubscribeToBranchFilesSubscriptionVariables = Exact<{
+  branch: Scalars['String'];
 }>;
 
 
-export type UpdateAliasMutation = { update_file_by_pk?: Maybe<Pick<File, 'id'>> };
+export type SubscribeToBranchFilesSubscription = { branch_by_pk?: Maybe<{ files: Array<Pick<File, 'id' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'mark_deleted' | 'contents'>> }> };
+
+export type UpdateContentsMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  contents: Scalars['String'];
+  js: Scalars['String'];
+  dts: Scalars['String'];
+  map: Scalars['String'];
+  errors: Scalars['jsonb'];
+}>;
+
+
+export type UpdateContentsMutation = { update_file_by_pk?: Maybe<Pick<File, 'id'>> };
 
 export type CreateModuleMutationVariables = Exact<{
   name: Scalars['String'];
@@ -2526,10 +2623,7 @@ export type GetModuleVersionFilesQueryVariables = Exact<{
 }>;
 
 
-export type GetModuleVersionFilesQuery = { file: Array<(
-    Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified' | 'alias_for'>
-    & { alias?: Maybe<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'is_modified' | 'alias_for'>> }
-  )> };
+export type GetModuleVersionFilesQuery = { file: Array<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'contents'>>, module_version: Array<Pick<Module_Version, 'version'>> };
 
 export type SubscribeToModuleVersionsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -2648,6 +2742,16 @@ export const SubscribeToBranchesDocument = gql`
   }
 }
     `;
+export const GetCompiledOutputDocument = gql`
+    query GetCompiledOutput($id: uuid!) {
+  file_by_pk(id: $id) {
+    js
+    dts
+    map
+    compile_errors
+  }
+}
+    `;
 export const GetFileDocument = gql`
     query GetFile($id: uuid!) {
   file_by_pk(id: $id) {
@@ -2661,8 +2765,7 @@ export const GetFileDocument = gql`
     branch_name
     base_file_id
     mark_deleted
-    is_modified
-    alias_for
+    contents
   }
 }
     `;
@@ -2679,46 +2782,28 @@ export const GetFileByAttrsDocument = gql`
     branch_name
     base_file_id
     mark_deleted
-    is_modified
-    alias_for
-    alias {
+    contents
+  }
+}
+    `;
+export const SubscribeToBranchFilesDocument = gql`
+    subscription SubscribeToBranchFiles($branch: String!) {
+  branch_by_pk(name: $branch) {
+    files {
       id
-      ext
       path
       module_name
       module_scope
       module_version
-      created_at
-      branch_name
-      base_file_id
       mark_deleted
-      is_modified
-      alias_for
+      contents
     }
   }
 }
     `;
-export const SubscribeToFilesDocument = gql`
-    subscription SubscribeToFiles {
-  file {
-    id
-    ext
-    path
-    module_name
-    module_scope
-    module_version
-    created_at
-    branch_name
-    base_file_id
-    mark_deleted
-    is_modified
-    alias_for
-  }
-}
-    `;
-export const UpdateAliasDocument = gql`
-    mutation UpdateAlias($id: uuid!, $alias: uuid) {
-  update_file_by_pk(pk_columns: {id: $id}, _set: {alias_for: $alias}) {
+export const UpdateContentsDocument = gql`
+    mutation UpdateContents($id: uuid!, $contents: String!, $js: String!, $dts: String!, $map: String!, $errors: jsonb!) {
+  update_file_by_pk(pk_columns: {id: $id}, _set: {contents: $contents, js: $js, dts: $dts, map: $map, compile_errors: $errors}) {
     id
   }
 }
@@ -2787,22 +2872,10 @@ export const GetModuleVersionFilesDocument = gql`
     branch_name
     base_file_id
     mark_deleted
-    is_modified
-    alias_for
-    alias {
-      id
-      ext
-      path
-      module_name
-      module_scope
-      module_version
-      created_at
-      branch_name
-      base_file_id
-      mark_deleted
-      is_modified
-      alias_for
-    }
+    contents
+  }
+  module_version(limit: 1, order_by: {created_at: desc}, where: {_and: {branch_name: {_eq: $branch}, module_scope: {_eq: $scope}, module_name: {_eq: $name}}}) {
+    version
   }
 }
     `;
@@ -2950,17 +3023,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     SubscribeToBranches(variables?: SubscribeToBranchesSubscriptionVariables): Promise<{ data?: SubscribeToBranchesSubscription | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
         return withWrapper(() => client.rawRequest<SubscribeToBranchesSubscription>(print(SubscribeToBranchesDocument), variables));
     },
+    GetCompiledOutput(variables: GetCompiledOutputQueryVariables): Promise<{ data?: GetCompiledOutputQuery | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
+        return withWrapper(() => client.rawRequest<GetCompiledOutputQuery>(print(GetCompiledOutputDocument), variables));
+    },
     GetFile(variables: GetFileQueryVariables): Promise<{ data?: GetFileQuery | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
         return withWrapper(() => client.rawRequest<GetFileQuery>(print(GetFileDocument), variables));
     },
     GetFileByAttrs(variables?: GetFileByAttrsQueryVariables): Promise<{ data?: GetFileByAttrsQuery | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
         return withWrapper(() => client.rawRequest<GetFileByAttrsQuery>(print(GetFileByAttrsDocument), variables));
     },
-    SubscribeToFiles(variables?: SubscribeToFilesSubscriptionVariables): Promise<{ data?: SubscribeToFilesSubscription | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<SubscribeToFilesSubscription>(print(SubscribeToFilesDocument), variables));
+    SubscribeToBranchFiles(variables: SubscribeToBranchFilesSubscriptionVariables): Promise<{ data?: SubscribeToBranchFilesSubscription | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
+        return withWrapper(() => client.rawRequest<SubscribeToBranchFilesSubscription>(print(SubscribeToBranchFilesDocument), variables));
     },
-    UpdateAlias(variables: UpdateAliasMutationVariables): Promise<{ data?: UpdateAliasMutation | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<UpdateAliasMutation>(print(UpdateAliasDocument), variables));
+    UpdateContents(variables: UpdateContentsMutationVariables): Promise<{ data?: UpdateContentsMutation | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
+        return withWrapper(() => client.rawRequest<UpdateContentsMutation>(print(UpdateContentsDocument), variables));
     },
     CreateModule(variables: CreateModuleMutationVariables): Promise<{ data?: CreateModuleMutation | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
         return withWrapper(() => client.rawRequest<CreateModuleMutation>(print(CreateModuleDocument), variables));
