@@ -2548,9 +2548,8 @@ export type GetFileQueryVariables = Exact<{
 
 export type GetFileQuery = { file_by_pk?: Maybe<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'contents'>> };
 
-export type GetFileByAttrsQueryVariables = Exact<{
+export type GetFileIdQueryVariables = Exact<{
   branch?: Maybe<Scalars['String']>;
-  ext?: Maybe<Scalars['String']>;
   module?: Maybe<Scalars['String']>;
   scope?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['String']>;
@@ -2558,7 +2557,7 @@ export type GetFileByAttrsQueryVariables = Exact<{
 }>;
 
 
-export type GetFileByAttrsQuery = { file: Array<Pick<File, 'id' | 'ext' | 'path' | 'module_name' | 'module_scope' | 'module_version' | 'created_at' | 'branch_name' | 'base_file_id' | 'mark_deleted' | 'contents'>> };
+export type GetFileIdQuery = { file: Array<Pick<File, 'id' | 'branch_name'>> };
 
 export type SubscribeToBranchFilesSubscriptionVariables = Exact<{
   branch: Scalars['String'];
@@ -2769,20 +2768,11 @@ export const GetFileDocument = gql`
   }
 }
     `;
-export const GetFileByAttrsDocument = gql`
-    query GetFileByAttrs($branch: String, $ext: String, $module: String, $scope: String, $version: String, $path: String) {
-  file(where: {branch_name: {_eq: $branch}, ext: {_eq: $ext}, module_name: {_eq: $module}, module_scope: {_eq: $scope}, module_version: {_eq: $version}, path: {_eq: $path}}) {
+export const GetFileIdDocument = gql`
+    query GetFileId($branch: String, $module: String, $scope: String, $version: String, $path: String) {
+  file(where: {_or: [{branch_name: {_eq: $branch}, module_name: {_eq: $module}, module_scope: {_eq: $scope}, module_version: {_eq: $version}, path: {_eq: $path}}, {branch_name: {_eq: "main"}, module_name: {_eq: $module}, module_scope: {_eq: $scope}, module_version: {_eq: $version}, path: {_eq: $path}}]}) {
     id
-    ext
-    path
-    module_name
-    module_scope
-    module_version
-    created_at
     branch_name
-    base_file_id
-    mark_deleted
-    contents
   }
 }
     `;
@@ -3029,8 +3019,8 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     GetFile(variables: GetFileQueryVariables): Promise<{ data?: GetFileQuery | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
         return withWrapper(() => client.rawRequest<GetFileQuery>(print(GetFileDocument), variables));
     },
-    GetFileByAttrs(variables?: GetFileByAttrsQueryVariables): Promise<{ data?: GetFileByAttrsQuery | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<GetFileByAttrsQuery>(print(GetFileByAttrsDocument), variables));
+    GetFileId(variables?: GetFileIdQueryVariables): Promise<{ data?: GetFileIdQuery | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
+        return withWrapper(() => client.rawRequest<GetFileIdQuery>(print(GetFileIdDocument), variables));
     },
     SubscribeToBranchFiles(variables: SubscribeToBranchFilesSubscriptionVariables): Promise<{ data?: SubscribeToBranchFilesSubscription | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; }> {
         return withWrapper(() => client.rawRequest<SubscribeToBranchFilesSubscription>(print(SubscribeToBranchFilesDocument), variables));
